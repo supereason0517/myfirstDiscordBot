@@ -176,7 +176,7 @@ function Queue(message,serverQueue){
         return message.channel.send("你沒在頻道裡阿")
 
     let nowplaying = serverQueue.songs[0];
-    let queuemessage = `正在播放:${nowplaying.title}\n===================================================\n`
+    let queuemessage = `正在播放:${nowplaying.title}\n==============================================\n`
     
 
     for(var i=1;i<serverQueue.songs.length;i++){
