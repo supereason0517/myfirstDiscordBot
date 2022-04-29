@@ -170,7 +170,7 @@ function play(guild, song) {
 }
 
 function Queue(message,serverQueue){
-    if(!serverQueue.connection)
+    if(!serverQueue)
         return message.channel.send("沒歌播了啦")
     if(!message.member.voice.channel)
         return message.channel.send("你沒在頻道裡阿")
