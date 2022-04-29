@@ -134,6 +134,8 @@ function skip(message, serverQueue) {
         );
     if (!serverQueue)
         return message.channel.send("沒歌可以跳了");
+        
+    message.channel.send("工作結束，高歌離席");
     serverQueue.connection.dispatcher.end();
 }
 
@@ -147,6 +149,7 @@ function stop(message, serverQueue) {
         return message.channel.send("沒歌可以停了");
 
     serverQueue.songs = [];
+    message.channel.send("工作結束，高歌離席");
     serverQueue.connection.dispatcher.end();
 }
 
