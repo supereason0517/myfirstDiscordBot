@@ -1,5 +1,7 @@
 # discordBot
 *記得貼你的discord bot Token 到 settings.json*
+### 怎麼用
+- 執行bot.js
 ### 功能介紹
 - !9ay @someone - 貼甲文
 - !play !stop !skip !queue - 音樂機器人的功能
