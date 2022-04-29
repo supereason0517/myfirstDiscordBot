@@ -11,7 +11,7 @@ const queue = new Map();
 
 
 client.on('ready', () => {
-    console.log(`${client.user.tag} 準備好了！`);
+    console.log(`${client.user.tag} 啟動！`);
 });
 
 client.on('message', async message => {
@@ -55,7 +55,7 @@ client.on('message', async message => {
     } else if (commands === 'play') {
 
         if (!message.content.includes(`https://www.youtube.com`)) {
-            return;
+            return message.channel.send("你後面要加YT網址阿");
         } else {
             execute(message, serverQueue);
             return;
