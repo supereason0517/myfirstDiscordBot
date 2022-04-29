@@ -180,7 +180,7 @@ function Queue(message,serverQueue){
     
 
     for(var i=1;i<serverQueue.songs.length;i++){
-        queuemessage += `${i}.${serverQueue.songs[i].title}`
+        queuemessage += `${i}.${serverQueue.songs[i].title}\n`
     }
     message.channel.send(queuemessage);
 }
