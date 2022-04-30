@@ -54,11 +54,11 @@ client.on('message', async message => {
         }
     } else if (commands === 'play') {
 
-        if (!message.content.includes(`https://www.youtube.com`)) {
-            return message.channel.send("你後面要加YT網址阿");
-        } else {
+        if (message.content.includes(`https://www.youtube.com`) || message.content.includes(`https://youtube.com`)) {
             execute(message, serverQueue);
             return;
+        } else {
+            return message.channel.send("你後面要加YT網址阿");
         }
 
     } else if (commands === 'skip') {
@@ -68,7 +68,7 @@ client.on('message', async message => {
         stop(message, serverQueue);
         return;
     } else if (commands === 'queue') {
-        Queue(message,serverQueue);
+        Queue(message, serverQueue);
         return;
     } else {
         message.channel.send("NT你是不是打錯指令");
@@ -115,7 +115,7 @@ async function execute(message, serverQueue) {
         try {
             var connection = await voiceChannel.join();
             queueContruct.connection = connection;
-            play(message.guild, queueContruct.songs[0]);
+            play(message.guild, queueContruct.songs[0], message);
         } catch (err) {
             console.log(err);
             queue.delete(message.guild.id);
@@ -134,8 +134,8 @@ function skip(message, serverQueue) {
         );
     if (!serverQueue)
         return message.channel.send("沒歌可以跳了");
-        
-    serverQueue.connection.dispatcher.end();
+
+    return serverQueue.connection.dispatcher.end();
 }
 
 function stop(message, serverQueue) {
@@ -148,46 +148,44 @@ function stop(message, serverQueue) {
         return message.channel.send("沒歌可以停了");
 
     serverQueue.songs = [];
-    message.channel.send("工作結束，高歌離席");
     serverQueue.connection.dispatcher.end();
 }
 
-function play(guild, song) {
+function play(guild, song, message) {
     const serverQueue = queue.get(guild.id);
     if (!song) {
+        message.channel.send("高歌離席");
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return;
-    }
+      }
 
     const dispatcher = serverQueue.connection
         .play(ytdl(song.url))
         .on("finish", () => {
             serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0]);
+            play(guild, serverQueue.songs[0], message);
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     serverQueue.textChannel.send(`正在播放: **${song.title}**`);
 }
 
-function Queue(message,serverQueue){
-    if(!serverQueue)
+function Queue(message, serverQueue) {
+    if (!serverQueue)
         return message.channel.send("沒歌播了啦")
-    if(!message.member.voice.channel)
+    if (!message.member.voice.channel)
         return message.channel.send("你沒在頻道裡阿")
 
     let nowplaying = serverQueue.songs[0];
     let queuemessage = `正在播放:${nowplaying.title}\n==============================================\n`
-    
 
-    for(var i=1;i<serverQueue.songs.length;i++){
+
+    for (var i = 1; i < serverQueue.songs.length; i++) {
         queuemessage += `${i}.${serverQueue.songs[i].title}\n`
     }
     message.channel.send(queuemessage);
 }
-
-
 
 
 client.login(settings.token);
